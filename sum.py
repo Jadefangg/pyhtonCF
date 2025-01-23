@@ -1,7 +1,7 @@
 # import math
-numberone=int(input("First number: "))
-a=numberone
-numbertwo=int(input("Second number: "))
-b=numbertwo
+input_one=int(input("First number: "))
+a=input_one
+input_two=int(input("Second number: "))
+b=input_two
 sum=a+b
 print("The sum of",a,"and",b,"is -",sum)
