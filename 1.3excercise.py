@@ -44,7 +44,7 @@ for i in range(n):
     
     recipes_list.append(recipe)
 
-# Display all recipes with their difficulty
+# this shows all recipes with their difficulty
 print("YOUR RECIPES:")
 print("====================")
 
@@ -55,7 +55,7 @@ for recipe in recipes_list:
     print(f"Ingredients: {', '.join(recipe['ingredients'])}")
     print(f"Difficulty level: {difficulty}")
 
-# Display all ingredients in alphabetical order
+# this will show all ingredients in alphabetical order
 print("INGREDIENTS AVAILABLE ACROSS ALL RECIPES:")
 print("====================")
 
