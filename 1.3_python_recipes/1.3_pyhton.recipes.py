@@ -18,7 +18,7 @@ def take_recipe():
 
 def calc_difficulty(recipe):
     """
-    Calculate recipe difficulty based on the cooking time and the ingredient count
+    Calculate recipe difficulty based on cooking time and ingredient count using binary decisions
     
     Parameters:
     - recipe (dict): Recipe dictionary containing 'cooking_time' and 'ingredients'
@@ -33,18 +33,17 @@ def calc_difficulty(recipe):
     TIME_THRESHOLD = 10
     INGREDIENT_THRESHOLD = 4
     
-    # Determine time difficulty
-    is_quick = cooking_time < TIME_THRESHOLD
-    is_simple = num_ingredients < INGREDIENT_THRESHOLD
-    
-    # Calculate difficulty using logical mapping
-    if is_quick and is_simple:
-        return "Easy"
-    if is_quick and not is_simple:
-        return "Medium"
-    if not is_quick and is_simple:
-        return "Intermediate"
-    return "This is Hard"
+    # Binary decision tree
+    if cooking_time < TIME_THRESHOLD:
+        if num_ingredients < INGREDIENT_THRESHOLD:
+            return "Easy"
+        else:
+            return "Medium"
+    else:
+        if num_ingredients < INGREDIENT_THRESHOLD:
+            return "Intermediate"
+        else:
+            return "Hard"
 recipes_list = []
 ingredients_list = []
 #while true loop to keep asking for recipes <<< This is the main loop
