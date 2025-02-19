@@ -1,6 +1,6 @@
 import pickle
 
-def take_recipe():
+def take_recipe():#taking input
     """Take recipe input from user and return a recipe dictionary"""
     name = input("Enter the recipe name: ")
     cooking_time = int(input("Enter cooking time (minutes): "))
@@ -32,7 +32,7 @@ def calc_difficulty(cooking_time, num_ingredients):
         return "Hard"
 
 # Main code
-filename = input("Enter the filename for your recipe data: ")
+filename = input("Enter the filename where your recipe data will be stored: ")
 
 # Initialize data structure
 try:

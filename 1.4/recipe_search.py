@@ -14,7 +14,7 @@ def search_ingredient(data):
         print(f"{index}. {ingredient}")
     
     try:
-        choice = int(input("\nEnter the number of the ingredient you want to search for: "))
+        choice = int(input("\nEnter the number of the ingredient you want to search for from this list: "))
         ingredient_searched = data['all_ingredients'][choice]
     except (ValueError, IndexError):
         print("Invalid input! Please enter a number from the list.")
