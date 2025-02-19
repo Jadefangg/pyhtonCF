@@ -47,7 +47,7 @@ def calc_difficulty(recipe):
     return "This is Hard"
 recipes_list = []
 ingredients_list = []
-
+#while true loop to keep asking for recipes <<< This is the main loop
 while True:
     # Ask to add recipe here
     choice = input("\nWould you like to add a recipe? (yes/no): ").lower()
