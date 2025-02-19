@@ -17,16 +17,34 @@ def take_recipe():
     return recipe
 
 def calc_difficulty(recipe):
-    """Calculate the difficulty of your recipe based on the cooking time and the number of ingredients"""
-    if recipe['cooking_time'] < 10 and len(recipe['ingredients']) < 4:
+    """
+    Calculate recipe difficulty based on the cooking time and the ingredient count
+    
+    Parameters:
+    - recipe (dict): Recipe dictionary containing 'cooking_time' and 'ingredients'
+    
+    Returns:
+    - str: Difficulty level (Easy, Medium, Intermediate, or Hard)
+    """
+    cooking_time = recipe['cooking_time']
+    num_ingredients = len(recipe['ingredients'])
+    
+    # Define thresholds
+    TIME_THRESHOLD = 10
+    INGREDIENT_THRESHOLD = 4
+    
+    # Determine time difficulty
+    is_quick = cooking_time < TIME_THRESHOLD
+    is_simple = num_ingredients < INGREDIENT_THRESHOLD
+    
+    # Calculate difficulty using logical mapping
+    if is_quick and is_simple:
         return "Easy"
-    elif recipe['cooking_time'] < 10 and len(recipe['ingredients']) >= 4:
+    if is_quick and not is_simple:
         return "Medium"
-    elif recipe['cooking_time'] >= 10 and len(recipe['ingredients']) < 4:
+    if not is_quick and is_simple:
         return "Intermediate"
-    else:
-        return "Hard"
-
+    return "This is Hard"
 recipes_list = []
 ingredients_list = []
 
