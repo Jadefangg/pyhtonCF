@@ -31,7 +31,7 @@ recipes_list = []
 ingredients_list = []
 
 while True:
-    # Ask to add recipe
+    # Ask to add recipe here
     choice = input("\nWould you like to add a recipe? (yes/no): ").lower()
     
     if choice != 'yes':
