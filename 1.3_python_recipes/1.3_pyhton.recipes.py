@@ -33,7 +33,7 @@ def calc_difficulty(recipe):
     TIME_THRESHOLD = 10
     INGREDIENT_THRESHOLD = 4
     
-    # Binary decision tree
+    # 2 condition if else based on thresholds
     if cooking_time < TIME_THRESHOLD:
         if num_ingredients < INGREDIENT_THRESHOLD:
             return "Easy"
