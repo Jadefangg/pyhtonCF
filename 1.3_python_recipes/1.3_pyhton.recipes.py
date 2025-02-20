@@ -17,6 +17,9 @@ def take_recipe():
     return recipe
 
 def calc_difficulty(recipe):
+    # this code below is a docstring and is part of python documentation, 
+    # a docstring can be accessed by typing help(calc_difficulty) in the python shell,
+    # or via print(calc_difficulty.__doc__).
     """
     Calculate recipe difficulty based on cooking time and ingredient count using binary decisions
     

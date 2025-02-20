@@ -8,6 +8,9 @@ def take_recipe():#taking input
     
     num_ingredients = int(input("How many ingredients would you like to enter? "))
     for i in range(num_ingredients):
+        #python f string is used here. A f-string is a way to embed expressions inside string literals, 
+        #using curly braces {}.
+        #I have used f string as it is more easy to use.
         ingredient = input(f"Enter ingredient {i+1}: ").lower()
         ingredients.append(ingredient)
     
@@ -35,30 +38,36 @@ def calc_difficulty(cooking_time, num_ingredients):
 filename = input("Enter the filename where your recipe data will be stored: ")
 
 # Initialize data structure
+#improved the try except block to handle more exceptions.
 try:
     with open(filename, 'rb') as file:
         data = pickle.load(file)
 except FileNotFoundError:
+    print("File not found. Creating new recipe data.")
     data = {
         'recipes_list': [],
         'all_ingredients': []
     }
-except:
-    print("Unexpected error occurred. Creating new recipe data.")
+except Exception as e:
+    print(f"An unexpected error occurred: {e}")
+    print("Creating new recipe data.")
     data = {
         'recipes_list': [],
         'all_ingredients': []
     }
 else:
-    file.close()
+    # This block runs only if try succeeds
+    print("Successfully loaded existing recipe data.")
 finally:
-    recipes_list = data['recipes_list']
-    all_ingredients = data['all_ingredients']
-
-# Get recipes from user
+    # Initialize lists from data with defaults if keys don't exist
+    recipes_list = data.get('recipes_list', [])
+    all_ingredients = data.get('all_ingredients', [])
+    print("Data initialization completed.")# Get recipes from user
 num_recipes = int(input("How many recipes would you like to enter? "))
 
 for i in range(num_recipes):
+    # The f string here is used to print the recipe number. 
+    # The \n is used to print a new line.
     print(f"\nRecipe {i+1}")
     recipe = take_recipe()
     recipes_list.append(recipe)
@@ -75,5 +84,5 @@ data = {
 }
 
 # Save to binary file
-with open(filename, 'wb') as file:
+with open(filename, 'wb') as file: #file output Operation<<<
     pickle.dump(data, file)
