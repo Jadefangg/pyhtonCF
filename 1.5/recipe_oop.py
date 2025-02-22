@@ -3,7 +3,8 @@ class Recipe:
     
                             # Class variable to store all ingredients across recipes
     all_ingredients = []    #stores all the ingredients across all the recipes.
-
+    #this tye of inheritance is called multiple inheritance and is a python 3 feature.
+    #it is used to inherit the properties of multiple classes.
     def __init__(self, name):
         """Initialize recipe with name and empty values."""
         self.name = name
