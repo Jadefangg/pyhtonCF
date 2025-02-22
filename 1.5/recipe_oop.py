@@ -1,8 +1,8 @@
 class Recipe:
     """the class to represent a cooking recipe."""
     
-    # Class variable to store all ingredients across recipes
-    all_ingredients = []#stores all the ingredients across all the recipes.
+                            # Class variable to store all ingredients across recipes
+    all_ingredients = []    #stores all the ingredients across all the recipes.
 
     def __init__(self, name):
         """Initialize recipe with name and empty values."""
@@ -67,15 +67,18 @@ class Recipe:
     # it is used to access the class variable.
     #a decorator is a design pattern in python that allows a user to add new functionality 
     # to an object without modifying its structure.
+
     @property
     def difficulty(self):
         """Get difficulty, calculating it if not set."""
         if self._difficulty is None:
             self.calculate_difficulty()
         return self._difficulty
+    
     #setter is a decorator that is an inbuilt function in python,
     #it is used to set the class variable
     #here it is being used to set the difficulty of the recipe.
+
     @difficulty.setter
     def difficulty(self, value):
         """Set difficulty."""
@@ -99,9 +102,11 @@ class Recipe:
             f"Ingredients: {', '.join(self.ingredients)}\n"
             f"Difficulty: {self.difficulty}"
         )
+    
     #classmethod is a decorator that is an inbuilt function in python,
     # it is used to define a method that is bound to the class rather than its object.
     #here it is used to search for recipes containing an ingredient.
+
     @classmethod
     def recipe_search(cls, data, search_term):#cls is used to access the class variable. 
         """Search for recipes containing an ingredient."""
@@ -115,6 +120,7 @@ class Recipe:
             print("No recipes found.")
 
 # The main code begins here
+
 def main():
     # Create Tea recipe
     tea = Recipe("Tea")
@@ -149,7 +155,7 @@ def main():
     print("=====================")
     for ingredient in ["Water", "Sugar", "Bananas"]:
         Recipe.recipe_search(recipes_list, ingredient)
-        
-    #__name__ is a built-in variable that is used to check if the code is being run as the main program.
+
+                           #__name__ is a built-in variable that is used to check if the code is being run as the main program.
 if __name__ == "__main__": #this is used to check if the code is being run as the main program.
-    main() #calling the main function.
+    main()                 #calling the main function.
