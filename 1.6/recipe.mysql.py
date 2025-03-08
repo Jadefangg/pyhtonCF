@@ -1,6 +1,9 @@
 import mysql.connector  # Import the MySQL connector
 
-conn = mysql.connector.connect(
+
+#These are the details of my MySQL server. The user is cf-python and the password is password. The host is localhost.
+#The connection is established using the connect() method of the mysql.connector module.
+conn = mysql.connector.connect( 
     host='localhost',
     user='cf-python',
     passwd='password')  # Establish a connection to the MySQL server
@@ -13,6 +16,7 @@ cursor.execute("CREATE DATABASE IF NOT EXISTS task_database")
 cursor.execute("USE task_database")
 print("using the task database test")
 
+#CREATE TABLE CODE
 # 3 ' are given to write the query in multiple lines. A single one can also be used.
 cursor.execute(''' 
 CREATE TABLE IF NOT EXISTS Recipes (
@@ -39,7 +43,7 @@ def main_menu(conn, cursor):
         choice = input("\nEnter your choice (1-5): ") # Get user input
         
         if choice == '1':                             # Call the appropriate function based on user choice
-            create_recipe(conn, cursor)
+            create_recipe(conn, cursor)               #THE CONN AND CURSOR are used to pass the connection and cursor objects to the functions
         elif choice == '2':
             search_recipe(conn, cursor)
         elif choice == '3':
@@ -85,7 +89,7 @@ def calculate_difficulty(cooking_time, ingredients_list):
         else:
             return "Hard"
 
-def create_recipe(conn, cursor):
+def create_recipe(conn, cursor): #the conn and cursor again are used to pass the connection and cursor objects to the functions, the cursor objects are used to execute the queries.
     """Create a new recipe and add it to the database."""
     print("\n-- Create a New Recipe --")
     
@@ -359,3 +363,10 @@ def delete_recipe(conn, cursor):
 # This is used to actually call the main menu function to start the program!
 if __name__ == "__main__":
     main_menu(conn, cursor)
+
+#>>>>>>>>>>>>>>>>   IMPORTANT <<<<<<<<<<<<<<<<<<<<<<<<<<<
+#To integrate SQLAlchemy, we need to install the SQLAlchemy library using pip:
+# pip install sqlalchemy
+# For this project I would need to replace the direct MySQL queries with SQLAlchemy ORM queries.
+# This would involve creating a Recipe class that maps to the Recipes table in the database.
+# The mysql.connector library would be replaced with the SQLAlchemy library.    
