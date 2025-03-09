@@ -27,7 +27,7 @@ class Recipe(Base):
     __tablename__ = 'final_recipes'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False)                    #nullable=False means that the column cannot be empty
     ingredients = Column(String(255))
     cooking_time = Column(Integer)
     difficulty = Column(String(20))
@@ -38,15 +38,15 @@ class Recipe(Base):
     
     def __str__(self):
         """Return a organised version of the recipe."""
-        return(
-            f"\n{'-' * 40}"
-            f"\n{self.name.upper():^40}"
-            f"\n{'-' * 40}"
-            f"\nCooking Time: {self.cooking_time} minutes"
-            f"\nDifficulty: {self.difficulty}"
-            f"\n\nIngredients:"
-            f"\n{'-' * 15}"
-            f"\n" + "\n".join([f"• {ingredient.strip()}" for ingredient in self.return_ingredients_as_list()])
+        return(#f string is used here to format the string in a more organised way.
+            f"\n{'-' * 40}", 
+            f"\n{self.name.upper():^40}",
+            f"\n{'-' * 40}",
+            f"\nCooking Time: {self.cooking_time} minutes",
+            f"\nDifficulty: {self.difficulty}",
+            f"\n\nIngredients:",
+            f"\n{'-' * 15}",
+            f"\n" + "\n".join([f"• {ingredient.strip()}" for ingredient in self.return_ingredients_as_list()]),
             f"\n{'-' * 40}\n"
             )
     
@@ -101,11 +101,11 @@ def create_recipe():
     # Get cooking time (ensure it's a positive integer)
     while True:
         try:
-            cooking_time = input("\nEnter cooking time (minutes): ")
-            if not cooking_time.isnumeric():
+            cooking_time = input("\nPlease enter the cooking time (minutes): ")
+            if not cooking_time.isnumeric():                        #not is used to check if the value is not a number, isnumeric() is a function that will return true if the string is a number.
                 print("Cooking time must be a positive number.")
                 continue
-            cooking_time = int(cooking_time)
+            cooking_time = int(cooking_time)                        #int is provided in sqlalchemy to convert the string to an integer.
             if cooking_time <= 0:
                 print("Cooking time must be a positive number.")
                 continue
@@ -126,13 +126,13 @@ def create_recipe():
                 print("You must enter at least one ingredient.")
                 continue
             break
-        except ValueError:
+        except ValueError:                      #value error is provided in sqlalchemy to catch any errors that occur when a value is not valid.
             print("Please enter a valid number.")
     
     print("\nEnter each ingredient:")
-    for i in range(num_ingredients):
+    for i in range(num_ingredients):       #this loop runs in every element of range, range is a function that will create a list of numbers from 0 to the number specified in the function.
         while True:
-            ingredient = input(f"{i+1}. ")
+            ingredient = input(f"{i+1}. ") 
             if not ingredient:
                 print("Ingredient cannot be empty.")
                 continue
@@ -176,7 +176,7 @@ def view_all_recipes():
     # Display recipes
     print(f"\nFound {len(recipes)} recipes:")
     for recipe in recipes:
-        print(recipe)  # This will call the __str__ method, this method is used to display the recipe in a formatted/organised way.
+        print(recipe)                       #this will print the recipe object in a formatted way.
 
 def search_by_ingredients():
     """Search for recipes containing specific ingredients."""
@@ -248,7 +248,7 @@ def search_by_ingredients():
     # The *conditions syntax unpacks the list of conditions and passes them as separate arguments to the or_() function.
     # This creates a combined filter that will match any recipe that contains ANY of the selected ingredients.
     
-    # Display results
+    # display results
     if not found_recipes:
         print("\nNo recipes found with the selected ingredients.")
     else:
@@ -260,21 +260,21 @@ def edit_recipe():
     """Edit an existing recipe."""
     print("\n------ Edit a Recipe ------")
     
-    # Check if there are any recipes
+    # check if there are any recipes
     recipe_count = session.query(Recipe).count()
     if recipe_count == 0:
         print("\nNo recipes found in the database.")
         return None
     
-    # Get all recipes (id and name)
+    # get all recipes (id and name)
     recipes = session.query(Recipe.id, Recipe.name).all()
     
-    # Display available recipes
+    # display available recipes
     print("\nAvailable recipes:")
     for recipe in recipes:
         print(f"ID: {recipe.id} - {recipe.name}")
     
-    # Get recipe ID to edit
+    # get recipe ID to edit
     while True:
         try:
             recipe_id = input("\nEnter the ID of the recipe to edit: ")
@@ -293,13 +293,13 @@ def edit_recipe():
         except ValueError:
             print("Please enter a valid number.")
     
-    # Display editable attributes
+    # display editable attributes
     print("\nRecipe details:")
     print(f"1. Name: {recipe_to_edit.name}")
     print(f"2. Ingredients: {recipe_to_edit.ingredients}")
     print(f"3. Cooking Time: {recipe_to_edit.cooking_time} minutes")
     
-    # Get attribute to edit
+    # get attribute to edit
     while True:
         try:
             attribute_choice = input("\nWhich attribute would you like to edit (1-3)? ")
@@ -316,7 +316,7 @@ def edit_recipe():
         except ValueError:
             print("Please enter a valid number.")
     
-    # Edit the chosen attribute
+    # edit the chosen attribute
     if attribute_choice == 1:
         # Edit name
         while True:
@@ -418,7 +418,7 @@ def delete_recipe():
         print(f"ID: {recipe.id} - {recipe.name}")
     
     # Get recipe ID to delete
-    while True:
+    while True:                     #the while loop has the purpose of ensuring that the user enters a valid ID. If the user enters an invalid ID, the loop will continue to ask for a valid ID.
         try:
             recipe_id = input("\nEnter the ID of the recipe to delete: ")
             if not recipe_id.isnumeric():
@@ -447,11 +447,11 @@ def delete_recipe():
         session.delete(recipe_to_delete)
         session.commit()
         print(f"\nRecipe '{recipe_to_delete.name}' deleted successfully!")
-    except Exception as e:
+    except Exception as e:                     #except as is a way to catch an exception and assign it to a variable. This variable can then be used to display the error message. 
         session.rollback()
-        print(f"Error deleting recipe: {e}")
+        print(f"Error deleting recipe: {e}")   #e is here again for the error message
 
-# Main Menu
+# >>> the main menu begins here <<<
 def main_menu():
     """Display the main menu and handle user choices."""
     while True:
@@ -463,7 +463,7 @@ def main_menu():
         print("5. Delete a recipe")
         print("Type 'quit' to exit the application")
         
-        choice = input("\nEnter your choice: ").lower()
+        choice = input("\nEnter your choice: ").lower()     #.lower() is used to convert the user's input to lowercase.
         
         if choice == '1':
             create_recipe()
@@ -482,8 +482,8 @@ def main_menu():
             print("Goodbye!")
             break
         else:
-            print("\nInvalid choice. Please enter a number between 1 and 5, or 'quit'.")
+            print("\nYour choice is wrong. Please enter a number between 1 and 5, or 'quit'.")
 
-# Run the application
+# run the main menu!
 if __name__ == "__main__":
     main_menu()

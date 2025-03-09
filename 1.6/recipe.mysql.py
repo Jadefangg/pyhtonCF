@@ -32,7 +32,7 @@ print("Recipes table created successfully!")
 #   MAIN MENU CODE
 def main_menu(conn, cursor):
     """Display main menu and handle user choices."""
-    while True:
+    while True: #\n is used to create a new line
         print("\n==== Recipe Management System ====") # Display the main menu
         print("1. Create a new recipe")
         print("2. Search for a recipe by ingredient")
@@ -43,7 +43,7 @@ def main_menu(conn, cursor):
         choice = input("\nEnter your choice (1-5): ") # Get user input
         
         if choice == '1':                             # Call the appropriate function based on user choice
-            create_recipe(conn, cursor)               #THE CONN AND CURSOR are used to pass the connection and cursor objects to the functions
+            create_recipe(conn, cursor)               # THE CONN AND CURSOR are used to pass the connection and cursor objects to the functions
         elif choice == '2':
             search_recipe(conn, cursor)
         elif choice == '3':
@@ -57,7 +57,7 @@ def main_menu(conn, cursor):
             conn.close()   # Close the connection
             print("Goodbye!")
             break
-        else:                                        # Handle invalid choices
+        else:                                         # Handle invalid choices
             print("Invalid choice. Please enter a number between 1 and 5.") 
 
 def calculate_difficulty(cooking_time, ingredients_list):
