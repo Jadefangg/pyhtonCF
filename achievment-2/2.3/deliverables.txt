@@ -1,0 +1,6 @@
+Does the application have to manage any other information,
+apart from books, customers, and sales? Your answer here will tell you which apps you need and,
+correspondingly, which tables you’ll need in your database.
+What attributes are needed for each information category? 
+For example, the customers category may need a name and picture for each customer.
+How do these attributes (i.e., tables or apps) interact with each other?
