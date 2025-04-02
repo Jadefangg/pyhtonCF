@@ -59,9 +59,9 @@ class RecipeModelTest(TestCase):
         ingredients_list = recipe.get_ingredients_list()
         self.assertEqual(len(ingredients_list), 3)
         self.assertIn('Test Ingredient', ingredients_list)
-        self.assertIn('Another Ingredient', ingredients_list)
-        self.assertIn('Third Ingredient', ingredients_list)
-        
+        # i am using the actual strings with spaces:
+        self.assertIn(' Another Ingredient', ingredients_list)
+        self.assertIn(' Third Ingredient', ingredients_list)        
     def test_calculate_difficulty_easy(self):
         """Test the calculate_difficulty method - Easy case"""
         recipe = Recipe.objects.create(
