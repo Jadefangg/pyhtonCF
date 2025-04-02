@@ -1,0 +1,8 @@
+Go to your project’s settings.py file to link your apps to the INSTALLED_APPS parameter.
+
+Screenshot the tree structure showing all the apps and the settings.py file in VSCode.
+
+Use the annotation tool in your image-editing software to point out the apps and the linkage.
+ 
+The following figure, for example, has annotations of two apps—books and customers—from the Bookstore application.
+Save this image as “project-structure.jpg” in “Exercise 2.3”.
