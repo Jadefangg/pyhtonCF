@@ -35,8 +35,7 @@ def home(request):
 def about(request):
     """The about page"""
     return render(request, 'recipes/about.html') #rendering the about page template
-#This is a CBV - specifically a ListView!
-# After your about() function and before the get_queryset() method
+# This is a CBV - specifically a ListView!
 class RecipeListView(ListView):
     """View for listing all recipes"""
     model = Recipe
@@ -54,7 +53,7 @@ class RecipeListView(ListView):
         # and chain the filters together with the & operator
         # but that would require that the user match both the name and ingredients to
         # get a match, which is not what we want.
-        
+
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
