@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Recipe App{% endblock %}</title>
+    <style>
+        /* Basic styling for a clean layout */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin-right: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .recipe-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .difficulty-easy { color: green; }
+        .difficulty-medium { color: orange; }
+        .difficulty-intermediate { color: orangered; }
+        .difficulty-hard { color: red; }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Recipe App</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'recipe-list' %}">All Recipes</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Recipe App</p>
+        </div>
+    </footer>
+</body>
+</html>
