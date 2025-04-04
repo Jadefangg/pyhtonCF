@@ -1,0 +1,121 @@
+Backend (model level) images will be stored at the project (application) level,
+while frontend images will be stored within apps.
+Ultimately, Django only needs to know the path of media files,
+but this structure is conventional and considered best practice.
+
+USING THE PIC ATTRIBUTE! <<
+
+1.Have a designated folder at the project (application) level where the images will be stored.
+2.Specify the path to this image folder in the project’s settings.py file.
+3.Specify URL-View mapping in the project’s urls.py file.
+4.Add the pic attribute to model(s). Update the code in the models.py files of the individual apps to create new fields/columns in the database.
+5.Provide a no-picture.jpg by default that the application can use in case an image isn’t available for a certain entity. This step is optional.
+
+Since you’ll be making changes to the models,
+remember that you need to keep running the commands makemigrations and 
+migrate to implement these changes to the database.
+-----------
+Step 1: Prepare Folder for Storing Images 
+
+    EXAMPLE DIRECTORY STRUCTURE:
+
+    `src`
+    |-- books 
+    |-- bookstore
+    |-- customers
+    |-- db.sqlite3
+    |-- manage.py
+    |-- `media`  << IMAGES stored here.
+    |-- sales
+    |-- salespersons
+-----------
+Step 2: Specify Path in Project’s settings.py File: <<
+
+ You now need to specify the path to this media folder in the main project settings.
+ Below STATIC_URL, add the following parameters needed for media files. These correspond to user-generated content:
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT= BASE_DIR / 'media'
+-----------
+Step 3: Specify URL-View Mapping <<
+
+ Next, you need to include the media settings in urlpatterns.
+ The following tree structure illustrates the urls.py file’s placement:
+
+    `src`
+    |-- books
+    |-- `bookstore`
+    |   |-- __init__.py
+    |   |-- __pycache__
+    |   |-- asgi.py
+    |   |-- settings.py
+    |   |-- `urls.py`
+    |   |-- wsgi.py
+    |-- customers
+    |-- db.sqlite3
+    |-- manage.py
+    |-- media
+    |-- sales
+    |-- salespersons
+
+    In the urls.py file, you first need to import settings and static. 
+    Importing settings allows you to access the MEDIA_URL and MEDIA_ROOT variables that you need to add. 
+    static will provide access to the Django helper function static( ),
+    which allows you to create URLs from local folder names.
+
+ from django.conf import settings
+ from django.conf.urls.static import static
+
+ Now, you’ll be extending the urlpatterns parameter to include the media information.
+ Add the following below the urlpatterns definition:
+
+Step 4: Add pic Attribute to Model <<
+ Step 4.1: Install the Python Package “Pillow”
+  You need the Python package Pillow installed so that you can work with images.
+  This package helps process images in Python and needs to be installed only once per project.
+
+  $pip install pillow
+
+ Step 4.2: Update Model to Add pic Attribute <<
+  You can now add the pic attribute to your Customer model, as follows:
+   pic = models.ImageField(upload_to='customers', default='no_picture.jpg')
+
+Step 5 (optional): Add no_picture.jpg as the Default <<
+-------------------------------------------------------------------------------------------------------------------------
+As mentioned earlier, you’ll be using src/media (your global media folder) for your default files. 
+
+To add the image to the HTML file, you’ll first want to use the load static command, which will generate the absolute URL (the URL that contains all the information necessary to locate a file/resource) of the static files and help Django locate the images on your machine. Next, you’ll need to access the image from the static folder.
+
+You can ask Django to load the static files for the HTML by adding the following line as the first line in the file:
+
+{% load static %}
+
+The {% ... %} delimiter acts as a tag that tells Django to do something
+in particular before creating the complete HTML page 
+from the template. In this case, it’s asking Django to load static.
+
+-{% comment %} and {% endcomment %} specify the start and end of comments.
+-{% for ... %} and {% endfor %} define a “for loop” block.
+-{% extends ... %} lets you inherit from another HTML file.
+-{% csrf_token %} provides online security.
+
+Now that you’ve specified the tag, 
+you can open the image by adding the <img> tag in the body section of the HTML file:
+
+>>>>>>>>>>>>>>>>>>>>>>         <<<<<<<<<<<<<<<<<<<<<<<<<<<  
+>>>>>>>>>>>>>>>>>>>>>> SUMMARY <<<<<<<<<<<<<<<<<<<<<<<<<<< 
+>>>>>>>>>>>>>>>>>>>>>>         <<<<<<<<<<<<<<<<<<<<<<<<<<< 
+
+Step 1: Update Your Recipe Model
+Step 2: Install Pillow
+Step 3: Make and Apply Migrations
+Step 4: Update URLs to Serve Media Files
+Step 5: Create a Form for Recipe Creation/Editing
+Step 6: Create Views for Adding/Editing Recipes
+Step 7: Add URLs for New Views
+Step 8: Create Templates for Adding/Editing Recipes
+Step 9: Update Recipe Detail Template to Show Images
+Step 10: Update Recipe List Template
+Step 11: Add CSS for Images
+Step 12: Add "Create Recipe" Button to Recipe List Page
+Step 13: Create a Media Directory
