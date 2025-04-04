@@ -8,6 +8,16 @@
     <div class="recipe-detail">
         <h2>{{ recipe.name }}</h2>
         
+            
+        {% if recipe.image %}
+            <div class="recipe-image">
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}">
+            </div>
+        {% endif %}
+        
+
+        
+        
         <div class="recipe-meta">
             <p>Cooking Time: <strong>{{ recipe.cooking_time }} minutes</strong></p>
             <p>Difficulty: <strong class="difficulty-{{ difficulty|lower }}">{{ difficulty }}</strong></p>
@@ -15,7 +25,8 @@
                 <p>Category: <a href="{% url 'category-detail' recipe.category.id %}">{{ recipe.category.name }}</a></p>
             {% endif %}
         </div>
-        
+       
+
         <div class="recipe-ingredients">
             <h3>Ingredients</h3>
             <ul>

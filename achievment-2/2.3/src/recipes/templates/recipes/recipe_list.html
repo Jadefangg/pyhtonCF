@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<!-- DJANGO TEMPLATE TAGS BEING USED -->
-
 {% extends 'recipes/base.html' %}
 
 {% block title %}All Recipes{% endblock %}
@@ -36,6 +34,11 @@
         {% if recipes %}
             {% for recipe in recipes %}
                 <div class="recipe-card">
+                    <!-- {% if recipe.image %}
+                        <div class="recipe-thumbnail">
+                            <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}">
+                        </div>
+                    {% endif %} -->
                     <h3>{{ recipe.name }}</h3>
                     <p>Cooking Time: {{ recipe.cooking_time }} minutes</p>
                     <p>Difficulty: {{ recipe.calculate_difficulty }}</p>
@@ -65,4 +68,6 @@
             <p>No recipes found matching your criteria.</p>
         {% endif %}
     </div>
+    
+ 
 {% endblock %}

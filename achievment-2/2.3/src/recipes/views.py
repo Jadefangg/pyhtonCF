@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, get_object_or_404 , redirect
+from django.views.generic import ListView, DetailView 
 from django.db.models import Q  # Import Q for complex queries
 from recipes.models import Recipe
 from categories.models import Category
 from ingredients.models import Ingredient
+from .forms import RecipeForm #2.5
 # Create your views here.
 
 #IMPORTANT - In django some views ar defined as functions and some as classes.
@@ -91,6 +92,33 @@ class RecipeDetailView(DetailView):
             category=recipe.category
         ).exclude(id=recipe.id)[:3]  # 3 related recipes
         return context
+
+# #ADD RECIPE -2.5
+# # This is a function-based view (FBV) for adding a new recipe.
+# def add_recipe(request):
+#     if request.method == 'POST':
+#         form = RecipeForm(request.POST, request.FILES)  # request.FILES is important for image uploads
+#         if form.is_valid():
+#             recipe = form.save()
+#             return redirect('recipe-detail', pk=recipe.pk)
+#     else:
+#         form = RecipeForm()
+    
+#     return render(request, 'recipes/add_recipe.html', {'form': form})
+# #EDIT RECIPE -2.5
+# # This is a function-based view (FBV) for editing an existing recipe.
+# def edit_recipe(request, pk):
+#     recipe = get_object_or_404(Recipe, pk=pk)
+    
+#     if request.method == 'POST':
+#         form = RecipeForm(request.POST, request.FILES, instance=recipe)
+#         if form.is_valid():
+#             recipe = form.save()
+#             return redirect('recipe-detail', pk=recipe.pk)
+#     else:
+#         form = RecipeForm(instance=recipe)
+    
+#     return render(request, 'recipes/edit_recipe.html', {'form': form})
 
 def category_view(request, category_id):
     """View for displaying recipes in a specific category"""
