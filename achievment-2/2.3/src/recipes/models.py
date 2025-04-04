@@ -10,6 +10,9 @@ class Recipe(models.Model):
     name = models.CharField(max_length=100) 
     cooking_time = models.IntegerField()
     ingredients = models.TextField()  # basic compatibility
+    #Added support for images << 2.5
+    image = models.ImageField(upload_to='recipe_images/', null=True, blank=True)
+
     
     # Use string references instead of direct model references
     category = models.ForeignKey('categories.Category', 
