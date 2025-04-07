@@ -1,0 +1,10 @@
+Adding Authentication to Django Recipe Project
+
+1: Update settings.py
+2: Create a Login View
+3: Create Login Template
+4: Add CSS for Login Page
+5: Update the URL Configuration
+6: Add Login Link to Base [main] Template
+7: Protect a View with Login Required
+8: Testing Authentication System
