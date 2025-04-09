@@ -147,7 +147,7 @@ class RecipeSearchFormTest(TestCase):
         form = RecipeSearchForm(data=form_data)
         self.assertTrue(form.is_valid())  # Empty form should be valid       
 
-# recipes/tests.py
+
 class RecipeAnalyticsViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
