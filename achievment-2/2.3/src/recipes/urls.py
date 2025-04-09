@@ -17,8 +17,9 @@ urlpatterns = [
     path('recipe/add/', views.add_recipe, name='add-recipe'),#2.5
     path('recipe/<int:pk>/edit/', views.edit_recipe, name='edit-recipe'), #2.5,
     path('logout/success/', views.logout_success, name='logout-success'),
-    path('logout/', views.custom_logout, name='logout'),
+    path('logout/', views.custom_logout, name='logout'), #2.6
     # Search
-    path('search/', views.search_view, name='search'),
-
+    # path('search/', views.search_view, name='search'), removed for advanced search in 2.7
+    path('search/', views.advanced_search, name='advanced-search'), #2.7
+    path('analytics/', views.recipe_analytics, name='recipe-analytics'), #2.7 path for DV template.
 ]

@@ -9,6 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 import random
 from django.contrib.auth import logout as auth_logout
+from .forms import RecipeSearchForm #2.7
+from io import BytesIO #2.7 
+import base64 #2.7
+import matplotlib.pyplot as plt #2.7
+import numpy as np
+import pandas as pd #2.7
+
 
 
 
@@ -219,3 +226,140 @@ def logout_success(request):
         random_recipe = Recipe.objects.all()[random_index]
     
     return render(request, 'recipes/success.html', {'random_recipe': random_recipe})
+
+#2.7
+def advanced_search(request):
+    form = RecipeSearchForm(request.GET or None)
+    results = None
+    df = None
+    
+    if request.GET and form.is_valid():
+        # Start with all recipes
+        query = Recipe.objects.all()
+        
+        # Filter by search query (name or ingredients)
+        search_query = form.cleaned_data.get('search_query')
+        if search_query:
+            query = query.filter(
+                Q(name__icontains=search_query) | 
+                Q(ingredients__icontains=search_query)
+            )
+        
+        # Filter by category
+        category = form.cleaned_data.get('category')
+        if category:
+            query = query.filter(category=category)
+        
+        # Filter by cooking time
+        max_cooking_time = form.cleaned_data.get('max_cooking_time')
+        if max_cooking_time:
+            query = query.filter(cooking_time__lte=max_cooking_time)
+        
+        # Get results
+        results = query
+        
+        # Convert to pandas DataFrame for table display and analysis
+        if results:
+            df = pd.DataFrame(list(results.values('id', 'name', 'cooking_time', 'category__name')))
+            df.columns = ['ID', 'Recipe Name', 'Cooking Time (min)', 'Category']
+            
+            # Filter by difficulty (need to do this after conversion to DataFrame since it's calculated)
+            difficulty = form.cleaned_data.get('difficulty')
+            if difficulty:
+                difficulty_filtered = []
+                for recipe in results:
+                    if recipe.calculate_difficulty().lower() == difficulty.lower():
+                        difficulty_filtered.append(recipe)
+                results = difficulty_filtered
+    
+    context = {
+        'form': form,
+        'results': results,
+        'dataframe': df.to_html(classes='table table-striped', index=False) if df is not None else None,
+    }
+    return render(request, 'recipes/advanced_search.html', context)
+
+def recipe_analytics(request):
+    # 1. Prepare data for analysis
+    recipes = Recipe.objects.all()
+    
+    # 2. Bar Chart: Recipe Count by Category
+    category_data = {}
+    for recipe in recipes:
+        if recipe.category:
+            category_name = recipe.category.name
+            category_data[category_name] = category_data.get(category_name, 0) + 1
+    
+    # Create bar chart
+    plt.figure(figsize=(10, 6))
+    plt.bar(category_data.keys(), category_data.values())
+    plt.xlabel('Categories')
+    plt.ylabel('Number of Recipes')
+    plt.title('Recipes per Category')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    
+    # Save to BytesIO object
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    category_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+    
+    # 3. Pie Chart: Recipe Difficulty Distribution
+    difficulty_data = {'Easy': 0, 'Medium': 0, 'Intermediate': 0, 'Hard': 0}
+    for recipe in recipes:
+        difficulty = recipe.calculate_difficulty()
+        difficulty_data[difficulty] = difficulty_data.get(difficulty, 0) + 1
+    
+    # Create pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(difficulty_data.values(), labels=difficulty_data.keys(), autopct='%1.1f%%', startangle=90)
+    plt.title('Recipe Difficulty Distribution')
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    
+    # Save to BytesIO object
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    difficulty_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+    
+    # 4. Line Chart: Recipes by Cooking Time
+    cooking_times = [recipe.cooking_time for recipe in recipes]
+    
+    # Create time ranges
+    time_ranges = [0, 15, 30, 45, 60, 90, 120, max(cooking_times) + 1]
+    time_labels = ['0-15', '16-30', '31-45', '46-60', '61-90', '91-120', '120+']
+    time_counts = [0] * (len(time_ranges) - 1)
+    
+    for time in cooking_times:
+        for i in range(len(time_ranges) - 1):
+            if time_ranges[i] <= time < time_ranges[i + 1]:
+                time_counts[i] += 1
+                break
+    
+    # Create line chart
+    plt.figure(figsize=(10, 6))
+    plt.plot(time_labels, time_counts, marker='o', linestyle='-', linewidth=2)
+    plt.xlabel('Cooking Time (minutes)')
+    plt.ylabel('Number of Recipes')
+    plt.title('Recipe Distribution by Cooking Time')
+    plt.grid(True)
+    
+    # Save to BytesIO object
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    time_chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    plt.close()
+    
+    context = {
+        'category_chart': category_chart,
+        'difficulty_chart': difficulty_chart,
+        'time_chart': time_chart,
+        'recipe_count': len(recipes),
+        'category_count': Category.objects.count()
+    }
+    
+    return render(request, 'recipes/analytics.html', context)

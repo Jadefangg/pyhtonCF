@@ -2,6 +2,10 @@ from django.test import TestCase
 from recipes.models import Recipe
 from categories.models import Category
 from ingredients.models import Ingredient
+from .forms import RecipeSearchForm
+from django.urls import reverse
+from django.test import Client
+
 
 class RecipeModelTest(TestCase):
     """Tests for the Recipe model"""
@@ -114,3 +118,140 @@ class RecipeModelTest(TestCase):
         """Test the string representation of the Recipe model"""
         recipe = Recipe.objects.get(id=1)
         self.assertEqual(str(recipe), recipe.name)
+
+#the tests for the advanced search form are below.
+
+class RecipeSearchFormTest(TestCase):
+    def setUp(self):
+        self.category = Category.objects.create(name='Test Category')
+    
+    def test_form_fields(self):
+        form = RecipeSearchForm()
+        self.assertTrue('search_query' in form.fields)
+        self.assertTrue('category' in form.fields)
+        self.assertTrue('max_cooking_time' in form.fields)
+        self.assertTrue('difficulty' in form.fields)
+    
+    def test_search_form_valid(self):
+        form_data = {
+            'search_query': 'test recipe',
+            'category': self.category.id,
+            'max_cooking_time': 30,
+            'difficulty': 'easy'
+        }
+        form = RecipeSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())
+    
+    def test_search_form_empty(self):
+        form_data = {}
+        form = RecipeSearchForm(data=form_data)
+        self.assertTrue(form.is_valid())  # Empty form should be valid       
+
+# recipes/tests.py
+class RecipeAnalyticsViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create categories
+        cls.category = Category.objects.create(name='Test Category')
+        
+        # Create recipes
+        Recipe.objects.create(
+            name='Easy Recipe',
+            cooking_time=10,
+            ingredients='ingredient1',
+            category=cls.category
+        )
+        Recipe.objects.create(
+            name='Hard Recipe',
+            cooking_time=60,
+            ingredients='ingredient1, ingredient2, ingredient3, ingredient4',
+            category=cls.category
+        )
+    
+    def setUp(self):
+        self.client = Client()
+    
+    def test_view_url_exists(self):
+        response = self.client.get('/analytics/')
+        self.assertEqual(response.status_code, 200)
+    
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('recipe-analytics'))
+        self.assertEqual(response.status_code, 200)
+    
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('recipe-analytics'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'recipes/analytics.html')
+    
+    def test_context_contains_charts(self):
+        response = self.client.get(reverse('recipe-analytics'))
+        self.assertTrue('category_chart' in response.context)
+        self.assertTrue('difficulty_chart' in response.context)
+        self.assertTrue('time_chart' in response.context)
+    
+    def test_context_contains_stats(self):
+        response = self.client.get(reverse('recipe-analytics'))
+        self.assertEqual(response.context['recipe_count'], 2)
+        self.assertEqual(response.context['category_count'], 1)         
+
+class RecipeSearchViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Create test data
+        cls.category1 = Category.objects.create(name='Breakfast')
+        cls.category2 = Category.objects.create(name='Dinner')
+        
+        # Create recipes
+        Recipe.objects.create(
+            name='Test Recipe 1',
+            cooking_time=15,
+            ingredients='ingredient1, ingredient2',
+            category=cls.category1
+        )
+        Recipe.objects.create(
+            name='Test Recipe 2',
+            cooking_time=45,
+            ingredients='ingredient3, ingredient4',
+            category=cls.category2
+        )
+        Recipe.objects.create(
+            name='Special Pasta',
+            cooking_time=30,
+            ingredients='pasta, sauce',
+            category=cls.category2
+        )
+    
+    def setUp(self):
+        self.client = Client()
+    
+    def test_search_view_exists(self):
+        response = self.client.get('/search/')
+        self.assertEqual(response.status_code, 200)
+    
+    def test_search_by_name(self):
+        response = self.client.get('/search/?search_query=Test Recipe 1')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('results' in response.context)
+        self.assertEqual(len(response.context['results']), 1)
+    
+    def test_search_partial_name(self):
+        """Test that partial search works (wildcard functionality)"""
+        response = self.client.get('/search/?search_query=Special')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('results' in response.context)
+        self.assertEqual(len(response.context['results']), 1)
+        self.assertEqual(response.context['results'][0].name, 'Special Pasta')
+    
+    def test_search_by_ingredient(self):
+        """Test search by ingredient"""
+        response = self.client.get('/search/?search_query=pasta')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('results' in response.context)
+        self.assertEqual(len(response.context['results']), 1)
+        self.assertEqual(response.context['results'][0].name, 'Special Pasta')
+    
+    def test_search_by_category(self):
+        """Test filtering by category"""
+        response = self.client.get(f'/search/?category={self.category1.id}')
+        self.assertEqual(response.status_code, 200)
