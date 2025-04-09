@@ -1,0 +1,20 @@
+# Recipe Management System
+
+A simple Python program that allows users to manage and track cooking recipes, including ingredients and difficulty levels.
+
+## Description
+
+This program helps users:
+- Create and store multiple recipes
+- Track cooking times and ingredients
+- Automatically calculate recipe difficulty
+- View a sorted list of all ingredients across recipes
+
+## Features
+
+- Recipe input with name, cooking time, and ingredients
+- Automatic difficulty calculation based on:
+  - Cooking time
+  - Number of ingredients
+- Display of all recipes with details
+- Alphabetically sorted ingredient list
