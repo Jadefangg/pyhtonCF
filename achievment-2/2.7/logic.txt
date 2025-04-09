@@ -1,0 +1,18 @@
+Search criteria: Recipe name, ingredients, cooking time, difficulty, category
+Search behavior: Partial matches, case-insensitive
+Results format: Table with clickable recipe names
+
+Create a Search Form
+Create the Advanced Search View
+Create the Search Template
+
+Update URLs
+Add Search Link to Navigation
+
+DATA VISUALISATION IMPLEMENTATION.
+Create a Visualizations View
+Create the Template
+Update URLs
+Add template Link to Navigation
+
+WRITING TESTS
