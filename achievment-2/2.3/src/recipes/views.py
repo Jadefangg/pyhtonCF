@@ -5,6 +5,13 @@ from recipes.models import Recipe
 from categories.models import Category
 from ingredients.models import Ingredient
 from .forms import RecipeForm #2.5
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+import random
+from django.contrib.auth import logout as auth_logout
+
+
+
 # Create your views here.
 
 #IMPORTANT - In django some views ar defined as functions and some as classes.
@@ -93,32 +100,35 @@ class RecipeDetailView(DetailView):
         ).exclude(id=recipe.id)[:3]  # 3 related recipes
         return context
 
-# #ADD RECIPE -2.5
-# # This is a function-based view (FBV) for adding a new recipe.
-# def add_recipe(request):
-#     if request.method == 'POST':
-#         form = RecipeForm(request.POST, request.FILES)  # request.FILES is important for image uploads
-#         if form.is_valid():
-#             recipe = form.save()
-#             return redirect('recipe-detail', pk=recipe.pk)
-#     else:
-#         form = RecipeForm()
+#ADD RECIPE -2.5
+# This is a function-based view (FBV) for adding a new recipe.
+@login_required #login protection
+def add_recipe(request):
+    if request.method == 'POST':
+        form = RecipeForm(request.POST, request.FILES)  # request.FILES is important for image uploads
+        if form.is_valid():
+            recipe = form.save()
+            return redirect('recipe-detail', pk=recipe.pk)
+    else:
+        form = RecipeForm()
     
-#     return render(request, 'recipes/add_recipe.html', {'form': form})
-# #EDIT RECIPE -2.5
-# # This is a function-based view (FBV) for editing an existing recipe.
-# def edit_recipe(request, pk):
-#     recipe = get_object_or_404(Recipe, pk=pk)
+    return render(request, 'recipes/add_recipe.html', {'form': form})
+#EDIT RECIPE -2.5
+# This is a function-based view (FBV) for editing an existing recipe.
+
+@login_required #login protection
+def edit_recipe(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
     
-#     if request.method == 'POST':
-#         form = RecipeForm(request.POST, request.FILES, instance=recipe)
-#         if form.is_valid():
-#             recipe = form.save()
-#             return redirect('recipe-detail', pk=recipe.pk)
-#     else:
-#         form = RecipeForm(instance=recipe)
+    if request.method == 'POST':
+        form = RecipeForm(request.POST, request.FILES, instance=recipe)
+        if form.is_valid():
+            recipe = form.save()
+            return redirect('recipe-detail', pk=recipe.pk)
+    else:
+        form = RecipeForm(instance=recipe)
     
-#     return render(request, 'recipes/edit_recipe.html', {'form': form})
+    return render(request, 'recipes/edit_recipe.html', {'form': form})
 
 def category_view(request, category_id):
     """View for displaying recipes in a specific category"""
@@ -194,3 +204,18 @@ def difficulty_view(request, difficulty):
     }
     
     return render(request, 'recipes/difficulty.html', context)
+
+def custom_logout(request):
+    auth_logout(request)
+    return redirect('logout-success')
+ 
+def logout_success(request):
+    """View for successful logout"""
+    # Get a random recipe to suggest
+    random_recipe = None
+    if Recipe.objects.exists():
+        count = Recipe.objects.count()
+        random_index = random.randint(0, count - 1)
+        random_recipe = Recipe.objects.all()[random_index]
+    
+    return render(request, 'recipes/success.html', {'random_recipe': random_recipe})

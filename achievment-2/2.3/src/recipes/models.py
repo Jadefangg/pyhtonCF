@@ -11,7 +11,7 @@ class Recipe(models.Model):
     cooking_time = models.IntegerField()
     ingredients = models.TextField()  # basic compatibility
     #Added support for images << 2.5
-    image = models.ImageField(upload_to='recipe_images/', null=True, blank=True)
+    #image = models.ImageField(upload_to='recipe_images/', null=True, blank=True)
 
     
     # Use string references instead of direct model references

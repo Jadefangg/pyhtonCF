@@ -14,8 +14,11 @@ urlpatterns = [
     path('categories/<int:category_id>/', views.category_view, name='category-detail'),
     path('ingredients/<int:ingredient_id>/', views.ingredient_view, name='ingredient-detail'),
     path('difficulty/<str:difficulty>/', views.difficulty_view, name='difficulty'),
-    # path('recipe/add/', views.add_recipe, name='add-recipe'),#2.5
-    # path('recipe/<int:pk>/edit/', views.edit_recipe, name='edit-recipe') #2.5
+    path('recipe/add/', views.add_recipe, name='add-recipe'),#2.5
+    path('recipe/<int:pk>/edit/', views.edit_recipe, name='edit-recipe'), #2.5,
+    path('logout/success/', views.logout_success, name='logout-success'),
+    path('logout/', views.custom_logout, name='logout'),
     # Search
     path('search/', views.search_view, name='search'),
+
 ]
