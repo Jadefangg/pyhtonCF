@@ -1,1 +1,7 @@
-print("I am great!")
+Person table:                     Address table:
++----------+----------+-----------+    +-----------+----------+---------------+------------+
+| personId | lastName | firstName |    | addressId | personId | city          | state      |
++----------+----------+-----------+    +-----------+----------+---------------+------------+
+| 1        | Wang     | Allen     |    | 1         | 2        | New York City | New York   |
+| 2        | Alice    | Bob       |    | 2         | 3        | Leetcode      | California |
++----------+----------+-----------+    +-----------+----------+---------------+------------+
