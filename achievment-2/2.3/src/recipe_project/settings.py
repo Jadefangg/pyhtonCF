@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -82,6 +83,29 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+# Update allowed hosts
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
+
+# Configure whitenoise for static files
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Get environment variables for production or use defaults
+DEBUG = 'DJANGO_DEBUG' not in os.environ
+
+# Secret key should come from environment in production
+if 'DJANGO_SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ['DJANGO_SECRET_KEY']    
 
 
 # Password validation
