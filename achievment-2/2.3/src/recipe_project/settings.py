@@ -93,7 +93,7 @@ if DATABASE_URL:
         )
     }
 # Update allowed hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://recipe-app-cf-3f433a62092d.herokuapp.com/']  #add app nam url here
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'recipe-app-cf-3f433a62092d.herokuapp.com']  #add app nam url here
 
 
 # Configure whitenoise for static files
